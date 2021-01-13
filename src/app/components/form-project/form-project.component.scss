@@ -1,0 +1,11 @@
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  &__field {
+    width: 100%;
+  }
+}
+
+.example-chip-list {
+  width: 100%;
+}

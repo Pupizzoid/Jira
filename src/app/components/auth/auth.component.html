@@ -1,0 +1,51 @@
+<div class="auth">
+  <div>
+  <h1 class="auth__title">{{!isRegister ? "Sign Up" : "Sign In" }}</h1>
+  <form [formGroup]="authForm" class="auth__form" novalidate>
+    <mat-form-field appearance="outline" *ngIf="!isRegister" class="auth__field">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Jonh" formControlName="name">
+      <mat-error *ngIf="_name.errors?.required">
+        Name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- <mat-form-field appearance="outline" *ngIf="!isRegister" class="auth__field">
+      <mat-label>Surname</mat-label>
+      <input matInput placeholder="Smith" formControlName="surname">
+      <mat-error *ngIf="_surname.errors?.required">
+        Surname is <strong>required</strong>
+      </mat-error>
+    </mat-form-field> -->
+
+    <mat-form-field appearance="outline" class="auth__field">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="jonh_smith@gmail.com" formControlName="email">
+      <mat-error *ngIf="_email.errors?.email">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="_email.errors?.required">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="auth__field">
+      <mat-label>Password</mat-label>
+      <input matInput placeholder="******" formControlName="password" type="password">
+      <mat-error *ngIf="_password.errors?.minlength">
+        Password length should be not less then 6
+      </mat-error>
+      <mat-error *ngIf="_password.errors?.required">
+        Password is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="auth__btn" (click) = "handleSubmit()">{{!isRegister ? "Sign Up" : "Sign In" }}</button>
+  </form>
+  <a class="auth__link" [routerLink]="path">{{!isRegister ? "Already have account? Login" : "Don't have account? Register" }}</a>
+  <div class="auth__soc-btn-wrapper">
+    <button mat-stroked-button color="warn" class="auth__soc-btn" (click) = "loginWithGoogle()">Login with Google</button>
+    <button mat-stroked-button class="auth__soc-btn" (click)="loginWithGitHub()">Login with GitHub</button>
+  </div>
+ </div>
+</div>

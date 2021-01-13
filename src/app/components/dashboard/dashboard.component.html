@@ -1,0 +1,5 @@
+<div [@slideInAnimation]="outlet.isActivated ? outlet.activatedRoute : ''">
+  <app-header [displayName]="this.userData.name" [photoURL]="this.userData.photoURL"></app-header>
+  <router-outlet  #outlet="outlet" ></router-outlet>
+</div>
+<!-- <app-projects-list [projectList]='this.projectList' [openDialog]='openDialog'></app-projects-list> -->

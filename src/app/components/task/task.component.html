@@ -1,0 +1,66 @@
+<div mat-dialog-content class="issue" mat-base-typography>
+  <div class="issue__item issue__item--flex">
+    <h3 class="issue__title">
+      <mat-icon aria-hidden="false" aria-label="icon" color="accent">web</mat-icon>
+      <span>{{taskData.title | titlecase}}</span></h3>
+    <div class="issue__btn-wrapper">
+      <button mat-stroked-button color="primary" (click)="openDialog()">Edit</button>
+      <button mat-stroked-button color="warn" (click)="deleteItem()">Delete</button>
+    </div>
+  </div>
+
+  <mat-divider class="issue__divider"></mat-divider>
+  <div class="issue__item issue__item--third-block">
+    <div>
+      <p class="issue__subtitle">
+      <mat-icon aria-hidden="false" aria-label="icon" color="accent">how_to_reg</mat-icon>
+        <span>Assigned by: </span>
+      </p>
+      <p>
+        {{taskData.assignTo.name | titlecase}}
+      </p>
+    </div>
+    <div>
+      <p class="issue__subtitle">
+        <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">
+          trending_up</mat-icon>
+        <span>Priority: </span>
+      </p>
+      <p>{{taskData.priority | titlecase}}</p>
+    </div>
+    <div>
+      <p class="issue__subtitle">
+        <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">construction</mat-icon>
+        <span>Status: </span>
+      </p>
+      <p>{{taskData.status | titlecase }}</p>
+    </div>
+    <div>
+      <p class="issue__subtitle">
+        <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">event</mat-icon>
+        <span>Created date: </span>
+      </p>
+      <p>{{taskData.createdDate }}</p>
+    </div>
+    <div>
+      <p class="issue__subtitle">
+        <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">description</mat-icon>
+        <span>Deadline: </span>
+      </p>
+      <p>{{taskData.deadline | titlecase }}</p>
+    </div>
+  </div>
+  <mat-divider class="issue__divider"></mat-divider>
+
+  <div class="issue__item">
+    <h3 class="issue__title">
+      <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">description</mat-icon>
+      <span>Description:</span>
+    </h3>
+    <p>{{taskData.description}}</p>
+  </div>
+  <mat-divider class="issue__divider"></mat-divider>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close>Close</button>
+</div>

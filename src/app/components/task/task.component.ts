@@ -1,0 +1,72 @@
+import { taskData } from './../../utilites';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from "@angular/material/dialog";
+import { MatDialog } from '@angular/material/dialog';
+import { ApiService } from 'src/app/services';
+import { TaskFormComponent } from '../task-form/task-form.component';
+import { ITaskData } from '../../interfaces';
+
+@Component({
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.scss']
+})
+export class TaskComponent implements OnInit {
+  public taskData: ITaskData = taskData;
+  public screenSize: number;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<TaskComponent>,
+    public dialog: MatDialog,
+    private api: ApiService,
+  ) {
+    this.api.getTaskById(this.data.task.id)
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        this.taskData = doc.data();
+      });
+  });
+   }
+
+  ngOnInit(): void {}
+
+  public openDialog = (): void => {
+    const width = this.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.screenSize > 600 ? '80vw' : '100vw';
+
+    const dialogRef = this.dialog.open(TaskFormComponent, {
+      disableClose: true,
+      autoFocus: true,
+      width: width,
+      maxWidth: maxWidth,
+      data: {
+        usersList: this.data.usersList,
+        formTitle: "Edit Issue",
+        title: this.taskData.title,
+        description: this.taskData.description,
+        assignTo: this.taskData.assignTo.name,
+        type: this.taskData.type,
+        status: this.taskData.status,
+        priority: this.taskData.priority,
+        action: 'edit',
+        id: this.data.task.id,
+        deadline: this.taskData.deadline
+      }
+    })
+    dialogRef.afterClosed().subscribe(
+      data => {
+        if (data) {
+          this.api.updateTask(data)
+        }
+      }
+    );
+    this.screenSize = window.innerWidth;
+  }
+
+  public deleteItem = () => {
+    this.api.deleteTask(this.data.task.id);
+    this.dialogRef.close();
+  }
+
+}

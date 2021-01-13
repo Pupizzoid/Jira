@@ -1,0 +1,81 @@
+<h1 mat-dialog-title>{{data.formTitle}}</h1>
+<div mat-dialog-content [formGroup]="form" mat-base-typography>
+  <div class="form">
+
+    <mat-form-field appearance="fill" class="form__field--half">
+      <mat-label>Issue Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let item of issueTypes" [value]="item">
+          {{item}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="type.errors?.required">
+        Type is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field--half">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let item of issuePriorities" [value]="item">
+          {{item}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="priority.errors?.required">
+        Priority is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field--half">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let item of issueStatuses" [value]="item">
+          {{item | titlecase}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="status.errors?.required">
+        Status is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form__field--half">
+      <mat-label>Deadline</mat-label>
+      <input matInput formControlName="deadline" type="date">
+      <mat-error *ngIf="deadline.errors?.required">
+        Deadline is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" class="form__field">
+      <mat-label>Assignee</mat-label>
+      <input type="text" matInput formControlName="assignTo" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form__field">
+      <mat-label>Title</mat-label>
+      <input matInput placeholder="Create Jira" formControlName="title">
+      <mat-error *ngIf="title.errors?.required">
+        Title is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form__field">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" ></textarea>
+      <mat-error *ngIf="description.errors?.required">
+        Description is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="handleClose()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="handleCreate()" [disabled]="!form.valid">Save</button>
+</mat-dialog-actions>
+

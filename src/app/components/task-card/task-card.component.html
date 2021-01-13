@@ -1,0 +1,20 @@
+<mat-card class="task" [ngClass]="{
+  'task--high': item.priority.toLowerCase() === 'high',
+  'task--medium': item.priority.toLowerCase() === 'medium',
+  'task--low': item.priority.toLowerCase() === 'low'
+}">
+
+  <div class="task__content">
+    <h4>{{item.title}}</h4>
+    <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent" matTooltip="{{'Type issue: ' + item.type}}">{{getIconName()}}</mat-icon>
+  </div>
+  <p>{{item.priority}}</p>
+  <p class="task__dedline-info"><span>Deadline:</span> <span>{{item.deadline}}</span></p>
+  <div class="task__assigne-info">
+    <span>Assigned to:</span>
+    <p>
+      <img class="task__user-icon" src="{{item.assignTo.photoURL?.length > 0 ? item.assignTo.photoURL : 'assets/profile-user.svg'}}" alt="icon">
+      <span>{{item.assignTo.name}}</span>
+    </p>
+  </div>
+</mat-card>

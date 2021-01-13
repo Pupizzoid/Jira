@@ -88,7 +88,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   get deadline() {
-    return this.form.get('assignTo');
+    return this.form.get('deadline');
   }
 
   get title() {

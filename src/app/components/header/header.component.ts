@@ -20,8 +20,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public handleLogout() {
+  public handleLogout = () => {
     this.api.logout()
     .then(() => this.router.navigate(['login']))
+  }
+
+  public handleRoute = () => {
+    this.router.navigate(['dashboard/projects'])
   }
 }

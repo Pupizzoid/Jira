@@ -1,9 +1,8 @@
 .auth {
   width: 100%;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #ebecf0;
+  user-select: none;
 
   &__form {
     width: 320px;
@@ -33,6 +32,27 @@
   &__soc-btn-wrapper {
     display: flex;
     justify-content: space-between;
+  }
+
+  &__logo-wrapper {
+    width: 100%;
+    padding: 50px 0;
+    height: fit-content;
+  }
+
+  &__logo {
+    display: block;
+    margin: auto;
+    width: 80px;
+    height: 80px;
+  }
+
+  &__form-wrapper {
+    width: fit-content;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
   }
 }
 

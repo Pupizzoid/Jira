@@ -1,6 +1,6 @@
 <header class="header">
   <mat-toolbar color="primary">
-  <h3 class="header__logo" matTooltip="Back to all projects">Jira</h3>
+    <img class="header__logo" src="assets/jsw_white.png" matTooltip="Back to all projects" alt="Logo" (click) ="handleRoute()">
   <span class="example-spacer"></span>
       <span>Hello, {{displayName | titlecase}}</span>
       <img class="header__avatar" src="{{this.photoURL?.length > 0 ? this.photoURL : 'assets/profile-user.svg'}}" alt="Avatar">

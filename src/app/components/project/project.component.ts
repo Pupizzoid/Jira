@@ -92,7 +92,7 @@ export class ProjectComponent implements OnInit {
         title: '',
         description: '',
         assignTo: '',
-        status: 'Todo',
+        status: 'todo',
         type: 'Task',
         priority: 'Medium',
         action: 'create',
@@ -128,9 +128,11 @@ export class ProjectComponent implements OnInit {
   public handleGetMyTask = (): void => {
     this.api.getTaskAssignedTo(this.userData.id)
       .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        this.getAllTasksData(doc.data());
-      });
+        const myIssues = [];
+        querySnapshot.forEach((doc) => {
+          myIssues.push(doc.data());
+        });
+        this.getAllTasksData(myIssues);
     });
   }
 

@@ -1,5 +1,8 @@
 <div class="auth">
-  <div>
+  <div class="auth__logo-wrapper">
+    <img class="auth__logo" src="assets/jira-logo.svg" alt="Logo">
+  </div>
+  <div class="auth__form-wrapper">
   <h1 class="auth__title">{{!isRegister ? "Sign Up" : "Sign In" }}</h1>
   <form [formGroup]="authForm" class="auth__form" novalidate>
     <mat-form-field appearance="outline" *ngIf="!isRegister" class="auth__field">
@@ -9,14 +12,6 @@
         Name is <strong>required</strong>
       </mat-error>
     </mat-form-field>
-
-    <!-- <mat-form-field appearance="outline" *ngIf="!isRegister" class="auth__field">
-      <mat-label>Surname</mat-label>
-      <input matInput placeholder="Smith" formControlName="surname">
-      <mat-error *ngIf="_surname.errors?.required">
-        Surname is <strong>required</strong>
-      </mat-error>
-    </mat-form-field> -->
 
     <mat-form-field appearance="outline" class="auth__field">
       <mat-label>Email</mat-label>

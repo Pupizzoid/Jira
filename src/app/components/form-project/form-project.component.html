@@ -17,36 +17,9 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="example-chip-list">
-      <mat-label>Invite to project</mat-label>
-      <mat-chip-list #chipList aria-label="Fruit selection">
-        <mat-chip
-          *ngFor="let user of selectedUsers"
-          [selectable]="selectable"
-          [removable]="removable"
-          (removed)="remove(user)">
-          {{user.name}}
-          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-        </mat-chip>
-        <input
-          placeholder="New participants..."
-          #fruitInput
-          formControlName="participants"
-          [matAutocomplete]="auto"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="add($event)">
-      </mat-chip-list>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-        <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
-          {{user.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
   </div>
 </div>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="handleClose()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="handleCreate()">Create</button>
+  <button mat-raised-button color="primary" (click)="handleCreate()">Save</button>
 </mat-dialog-actions>

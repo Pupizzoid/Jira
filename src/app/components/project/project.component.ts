@@ -39,7 +39,8 @@ export class ProjectComponent implements OnInit {
   private subscriptions = [];
 
   ngOnInit(): void {
-    this.routeSubscription = this.route.params.subscribe(params => this.id = params['id']);
+    this.subscriptions.push(this.routeSubscription = this.route.params.subscribe(params => this.id = params['id']));
+
     this.api.getProjectById(this.id)
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -60,6 +61,7 @@ export class ProjectComponent implements OnInit {
     this.subscriptions.push(this.api.users.subscribe((users) => {
       this.usersList = users;
     }));
+
     this.subscriptions.push(this.api.tasks.subscribe(data => {
       const newData = data.filter(task => task.projectId === this.id)
       this.todo = newData.filter(item => item.status.toLowerCase() === 'todo');
@@ -109,7 +111,7 @@ export class ProjectComponent implements OnInit {
   ));
   }
 
-  public openTask = (item): void => {
+  public openTask = (item: ITaskData): void => {
     const width = this.screenSize > 600 ? '60%' : '100vw';
     const maxWidth = this.screenSize > 600 ? '80vw' : '100vw';
 
@@ -140,7 +142,7 @@ export class ProjectComponent implements OnInit {
     this.api.getAllTasks();
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  public drop = (event: CdkDragDrop<string[]>): void => {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -154,7 +156,7 @@ export class ProjectComponent implements OnInit {
     }
   }
 
-  public handleRoute = (id): void => {
+  public handleRoute = (id: string): void => {
     this.router.navigate([`dashboard/projects/${this.id}/issue`, id])
   }
 

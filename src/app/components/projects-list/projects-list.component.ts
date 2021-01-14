@@ -1,7 +1,7 @@
-import { Component, OnInit,  } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormProjectComponent } from '../form-project/form-project.component';
-import { ApiService } from 'src/app/services';
+import { ApiService, AlertService } from 'src/app/services';
 import { MatDialog } from '@angular/material/dialog';
 import { userData } from '../../utilites';
 import { IUserData, IProjectData } from '../../interfaces';
@@ -21,6 +21,7 @@ export class ProjectsListComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     public dialog: MatDialog,
+    private alert: AlertService
   ) { }
 
   private subscriptions = []
@@ -37,27 +38,8 @@ export class ProjectsListComponent implements OnInit {
               this.userData = doc.data();
             });
           })
-
-        // this.api.getUsersProject(user.uid).subscribe(data => {
-        //   console.log(user.uid);
-
-        //   console.log(data);
-
-        // })
-      //     .then((querySnapshot) => {
-      //     console.log(querySnapshot);
-
-      //     querySnapshot.forEach((doc) => {
-      //       console.log(doc.data(), doc);
-      //     });
-      // })
       }
     }));
-    // this.api.getUserProject(this.userData.id)
-    // .then((querySnapshot) => {
-    //   querySnapshot.forEach((doc) => {
-    //     console.log(doc.data(), this.userData);
-    //   });
   }
 
   ngOnDestroy() {
@@ -71,21 +53,20 @@ export class ProjectsListComponent implements OnInit {
       disableClose: true,
       autoFocus: true,
       width: '60%',
-      data: {}
+      data: {
+        title: '',
+        description: '',
+        participants: ''
+      }
     })
-    dialogRef.afterClosed().subscribe(
+    this.subscriptions.push(dialogRef.afterClosed().subscribe(
       data => {
         if (data) {
           const { title, description, participants } = data;
           const project = { title, description, ownerId: this.userData.id , tasks:[]}
           this.api.addProject(project)
-
         }
       }
-  );
-  }
-
-  public handleClick = (id): void => {
-    this.router.navigate(['dashboard/projects', id])
+  ));
   }
 }

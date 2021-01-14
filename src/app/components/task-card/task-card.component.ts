@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class TaskCardComponent {
   @Input() item;
 
-  public getIconName = () => {
+  public getIconName = (): string => {
     return this.item.type === 'Bug' ? 'bug_report' : this.item.type === 'Task' ? 'fact_check' : 'insights';
   }
 

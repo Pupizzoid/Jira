@@ -1,5 +1,5 @@
 import { taskData } from './../../utilites';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { ITaskData } from '../../interfaces';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss']
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent {
   public taskData: ITaskData = taskData;
   public screenSize: number;
   constructor(
@@ -28,9 +28,6 @@ export class TaskComponent implements OnInit {
       });
   });
    }
-
-  ngOnInit(): void {}
-
   public openDialog = (): void => {
     const width = this.screenSize > 600 ? '60%' : '100vw';
     const maxWidth = this.screenSize > 600 ? '80vw' : '100vw';
@@ -64,9 +61,8 @@ export class TaskComponent implements OnInit {
     this.screenSize = window.innerWidth;
   }
 
-  public deleteItem = () => {
+  public deleteItem = (): void => {
     this.api.deleteTask(this.data.task.id);
     this.dialogRef.close();
   }
-
 }

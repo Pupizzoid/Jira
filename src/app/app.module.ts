@@ -23,7 +23,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatMenuModule} from '@angular/material/menu';
 
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -35,6 +36,8 @@ import { ProjectsListComponent } from './components/projects-list/projects-list.
 import { TaskFormComponent } from './components/task-form/task-form.component';
 import { TaskComponent } from './components/task/task.component';
 import { TaskCardComponent } from './components/task-card/task-card.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { ProjectCardComponent } from './components/project-card/project-card.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,8 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
     TaskFormComponent,
     TaskComponent,
     TaskCardComponent,
+    AlertComponent,
+    ProjectCardComponent,
   ],
   entryComponents: [FormProjectComponent],
   imports: [
@@ -72,6 +77,7 @@ import { TaskCardComponent } from './components/task-card/task-card.component';
     MatDividerModule,
     MatButtonToggleModule,
     MatTooltipModule,
+    MatMenuModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],

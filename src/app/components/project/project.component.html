@@ -1,8 +1,8 @@
 <div class="project">
-  <!-- <a class="project__nav-link" routerLink="/dashboard/projects">
+  <a class="project__nav-link" routerLink="/dashboard/projects">
     <mat-icon aria-hidden="false" aria-label="icon">west</mat-icon>
     <span>Back to all projects</span>
-  </a> -->
+  </a>
   <h2>Project name: {{this.projectData.title}}</h2>
   <div class="project__nav">
     <button matTooltip="Issues, which assigned to you" mat-stroked-button color="warn" (click)="handleGetMyTask()" color="warn">My Issues</button>

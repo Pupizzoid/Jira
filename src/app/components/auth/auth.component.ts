@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Validators, FormGroup, FormControl} from '@angular/forms';
-import { ApiService } from '../../services';
+import {Validators, FormGroup, FormBuilder} from '@angular/forms';
+import { AlertService, ApiService } from '../../services';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -13,15 +12,16 @@ export class AuthComponent implements OnInit {
   public isRegister: boolean = false;
   public urlPath: string;
 	public path: string = '/login';
-
+  private subscriptions = [];
   constructor(
     private router: Router,
     private api: ApiService,
+    private alert: AlertService,
+    private fb: FormBuilder,
   ) {
-    this._createForm();
-    this.api.signedIn.subscribe(user => {
+    this.subscriptions.push(this.api.signedIn.subscribe(user => {
       this.isRegister = user;
-    });
+    }));
    }
 
   ngOnInit(): void {
@@ -30,6 +30,18 @@ export class AuthComponent implements OnInit {
       this.isRegister = true;
       this.path = '/register';
     }
+
+    this.authForm = this.fb.group({
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => {
+      sub.unsubscribe()
+    })
   }
 
   public handleSubmit(): void {
@@ -45,20 +57,21 @@ export class AuthComponent implements OnInit {
             id: user.user.uid,
             photoURL: ''
           }
-          this.api.updateUserData(userData)
+          this.api.updateUserData(userData);
         }
         this.router.navigate(['dashboard']);
       })
       .catch((error) => {
-        console.log(error);
+        this.alert.error(error.message);
       });
   }
 
-  public loginWithGoogle = () => {
-    this.api.googleSignIn()
+  public handleSocialAuth = (type: string): void => {
+    const authMethod = type === 'google' ? this.api.googleSignIn : this.api.gitHubSignIn;
+    authMethod()
     .then((result) => {
-      var credential = result.credential;
-      var user = result.user;
+      const credential = result.credential;
+      const user = result.user;
       if (user) {
         const userData = {
           name: user.displayName,
@@ -72,40 +85,11 @@ export class AuthComponent implements OnInit {
           this.router.navigate(['dashboard']);
         }
       }
-  })
-  }
-
-  public loginWithGitHub = () => {
-    this.api.gitHubSignIn()
-      .then((result) => {
-
-      // var credential = result.credential;
-      // var user = result.user;
-      // if (user) {
-      //   const userData = {
-      //     name: user.displayName,
-      //     id: user.uid,
-      //     email: user.email,
-      //     password: '',
-      //     photoURL: user.photoURL
-      //   }
-      //   this.api.updateUserData(userData);
-      //   if (this.isRegister) {
-      //     this.router.navigate(['dashboard']);
-      //   }
-      // }
-  })
-  }
-
-  private _createForm (): void {
-    this.authForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    })
+    .catch((error) => {
+      this.alert.error(error.message);
     });
   }
-
-  //Todo create type for getter
 
   get _name() {
     return this.authForm.get('name');

@@ -1,0 +1,38 @@
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;/* Red */
+  border-color: #f5c6cb;
+}
+.alert-success {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #c3e6cb;
+}
+
+.alert{
+  padding: 20px;
+  // color: white;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid transparent;
+  position: absolute;
+  bottom: 120px;
+  right: 50px;
+  border-radius: .25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+  display: inline-block;
+  margin-left: 40px;
+  cursor: pointer;
+}
+

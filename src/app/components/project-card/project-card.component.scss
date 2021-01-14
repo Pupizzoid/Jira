@@ -1,0 +1,21 @@
+.project {
+  user-select: none;
+  &__card {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-color: #ebecf0;
+    height: 100%;
+  }
+
+  &__card-action {
+    height: fit-content;
+    align-self: flex-end;
+  }
+
+  &__card-content {
+    flex-grow: 1;
+  }
+}

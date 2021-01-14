@@ -17,7 +17,7 @@
         <span>Assigned by: </span>
       </p>
       <p>
-        {{taskData.assignTo.name | titlecase}}
+        {{taskData.assignTo.name ? taskData.assignTo.name : 'Unassigned' | titlecase}}
       </p>
     </div>
     <div>

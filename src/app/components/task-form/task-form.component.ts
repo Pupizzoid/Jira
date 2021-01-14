@@ -4,7 +4,7 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { Validators, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
+import { map, startWith} from 'rxjs/operators';
 import { IUserData, ITaskData } from '../../interfaces';
 
 @Component({
@@ -46,20 +46,20 @@ export class TaskFormComponent implements OnInit {
     );
   }
 
-  displayFn(user: IUserData): string {
+  public displayFn = (user: IUserData): string => {
     return user && user.name ? user.name : '';
   }
 
-  private _filter(name: string): IUserData[] {
+  private _filter = (name: string): IUserData[] => {
     const filterValue = name.toLowerCase();
     return this.data.usersList.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  public handleClose() {
+  public handleClose = (): void  =>{
     this.dialogRef.close();
   }
 
-  public handleCreate() {
+  public handleCreate = (): void => {
     if (!this.form.valid) {
       return;
     }

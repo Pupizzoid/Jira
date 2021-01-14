@@ -39,8 +39,8 @@
   </form>
   <a class="auth__link" [routerLink]="path">{{!isRegister ? "Already have account? Login" : "Don't have account? Register" }}</a>
   <div class="auth__soc-btn-wrapper">
-    <button mat-stroked-button color="warn" class="auth__soc-btn" (click) = "loginWithGoogle()">Login with Google</button>
-    <button mat-stroked-button class="auth__soc-btn" (click)="loginWithGitHub()">Login with GitHub</button>
+    <button mat-stroked-button color="warn" class="auth__soc-btn" (click) = "handleSocialAuth('google')">Login with Google</button>
+    <button mat-stroked-button class="auth__soc-btn" (click)="handleSocialAuth('github')">Login with GitHub</button>
   </div>
  </div>
 </div>

@@ -14,7 +14,7 @@
     <span>Assigned to:</span>
     <p>
       <img class="task__user-icon" src="{{item.assignTo.photoURL?.length > 0 ? item.assignTo.photoURL : 'assets/profile-user.svg'}}" alt="icon">
-      <span>{{item.assignTo.name}}</span>
+      <span>{{item.assignTo.name ? item.assignTo.name  : 'Unassigned'}}</span>
     </p>
   </div>
 </mat-card>

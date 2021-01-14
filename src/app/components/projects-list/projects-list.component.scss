@@ -1,6 +1,8 @@
 :host {display: block;}
 .project {
   position: relative;
+  user-select: none;
+  height: 100%;
   h1 {
     text-align: center;
     user-select: none;
@@ -9,20 +11,17 @@
   &__list {
     width: 60%;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    height: auto;
     list-style: none;
-    justify-content: space-around;
     margin: auto;
   }
 
   &__item {
     margin: 30px;
-    min-width: 250px;
+    width: 250px;
     cursor: pointer;
     user-select: none;
-
+    height: auto;
   }
 
   &__card {
@@ -32,6 +31,16 @@
     justify-content: center;
     text-align: center;
     background-color: #ebecf0;
+  }
+
+  &__card-action {
+    height: fit-content;
+    align-self: flex-end;
+
+  }
+
+  &__card-content {
+    flex-grow: 1;
   }
 
   &__add-btn {

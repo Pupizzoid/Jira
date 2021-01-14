@@ -6,13 +6,6 @@ import { IUserData, IProjectData, ITaskData } from '../interfaces';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import firebase from 'firebase/app';
-// const getObservable = (collection: AngularFirestoreCollection<ITaskData>) => {
-//   const subject = new BehaviorSubject([]);
-//   collection.valueChanges({ idField: 'id' }).subscribe((val: ITaskData[]) => {
-//     subject.next(val)
-//   });
-//   return subject;
-// }
 @Injectable({
   providedIn: 'root'
 })
@@ -22,20 +15,13 @@ export class ApiService {
   private usersCollection: AngularFirestoreCollection<IUserData>;
   private projectsCollection: AngularFirestoreCollection<IProjectData>;
   private tasksCollection: AngularFirestoreCollection<ITaskData>;
-  // public todoTasksList = getObservable(this.fs.collection('todo'));
-  // public runningTasksList = getObservable(this.fs.collection('running'));
-  // public reviewTasksList = getObservable(this.fs.collection('review'));
-  // public doneTasksList = getObservable(this.fs.collection('done'));
+
   users: Observable<IUserData[]>;
   projects: Observable<IProjectData[]>;
   taskData: Observable<ITaskData[]>;
   tasks: BehaviorSubject<ITaskData[]> = new BehaviorSubject([]);
   currentTask: Observable<IUserData>;
   user: Observable<any>;
-  // projectsList: BehaviorSubject<ITaskData[]> = new BehaviorSubject([]);
-
-
-
   constructor(
     private afAuth: AngularFireAuth,
     private fs: AngularFirestore
@@ -125,20 +111,19 @@ export class ApiService {
     return this.projectsCollection.ref.where('__name__', "==", id).get()
   }
 
+  public updateProject = (project, id) => {
+    this.projectsCollection.doc(id).update(project);
+  }
+
+  public deleteProject = (id) => {
+    this.projectsCollection.doc(id).delete();
+  }
+
   public getUsersProject = (id) => {
    return this.projectsCollection.ref.where('ownerId', "==", id).get()
   }
 
   public getAllTasks = () => {
-    // this.tasksCollection.ref.where('projectId', "==", id)
-    //   .onSnapshot((querySnapshot)  => {
-    //     const tasks = [];
-    //     querySnapshot.forEach((doc) => {
-    //       tasks.push(doc.data());
-    //       // cities.push(doc.data());
-    //     });
-    //     this.tasks.next(tasks)
-    //   })
     this.tasksCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as ITaskData;

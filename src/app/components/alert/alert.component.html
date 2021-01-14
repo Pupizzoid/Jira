@@ -1,0 +1,7 @@
+<div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
+  <span>{{message.text}}</span>
+  <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" (click)="handleClose()" class="close">
+    <mat-icon>close</mat-icon>
+  </button>
+
+</div>

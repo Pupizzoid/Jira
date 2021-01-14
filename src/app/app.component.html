@@ -1,3 +1,4 @@
-<div [@slideInAnimation]="outlet.isActivated ? outlet.activatedRoute : ''">
+<div [@slideInAnimation]="outlet.isActivated ? outlet.activatedRoute : ''" class="app">
+  <app-alert></app-alert>
   <router-outlet #outlet="outlet" ></router-outlet>
 </div>

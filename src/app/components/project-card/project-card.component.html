@@ -1,11 +1,13 @@
-<mat-card class="project__card">
-  <div class="project__card-action">
+<mat-card class="project__card" [ngClass]="{
+  'project--own': this.userDataId === project.ownerId,
+  'project--member': this.userDataId !== project.ownerId}">
+  <div class="project__card-action" *ngIf="isOwner">
     <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="handleEdit(project)" [disabled]="!isOwner">Edit</button>
-      <button mat-menu-item (click)="handleDelete(project.id)" [disabled]="!isOwner">Delete</button>
+      <button mat-menu-item (click)="handleEdit(project)">Edit</button>
+      <button mat-menu-item (click)="handleDelete(project.id)">Delete</button>
     </mat-menu>
   </div>
   <div class="project__card-content" (click)='handleClick(project.id)'>

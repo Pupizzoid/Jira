@@ -59,6 +59,11 @@ export class TaskFormComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  public handleChange = (event) => {
+    console.log(event);
+
+  }
+
   public handleCreate = (): void => {
     if (!this.form.valid) {
       return;

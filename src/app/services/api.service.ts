@@ -1,65 +1,57 @@
-import { taskData } from './../utilites';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
 import { IUserData, IProjectData, ITaskData } from '../interfaces';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 import firebase from 'firebase/app';
+
+const processChanges = (changes) => {
+  return changes.map(a => {
+    const data = a.payload.doc.data() ;
+    const id = a.payload.doc.id;
+    return {id, ...data};
+  })
+}
 @Injectable({
   providedIn: 'root'
 })
 
 export class ApiService {
-  public signedIn: Observable<any>;
+  public screenSize = window.innerWidth;
   private usersCollection: AngularFirestoreCollection<IUserData>;
   private projectsCollection: AngularFirestoreCollection<IProjectData>;
   private tasksCollection: AngularFirestoreCollection<ITaskData>;
 
-  users: Observable<IUserData[]>;
-  projects: Observable<IProjectData[]>;
-  taskData: Observable<ITaskData[]>;
-  tasks: BehaviorSubject<ITaskData[]> = new BehaviorSubject([]);
-  currentTask: Observable<IUserData>;
-  user: Observable<any>;
+  public users: Observable<IUserData[]>;
+  // public projects: Observable<IProjectData[]>;
+  // public taskData: Observable<ITaskData[]>;
+  // public tasks: BehaviorSubject<ITaskData[]> = new BehaviorSubject([]);
+  // public currentTask: Observable<IUserData>;
+  // public user: Observable<any>;
+  public userData: IUserData;
+  // public projectsData: BehaviorSubject<IProjectData[]> = new BehaviorSubject([]);
+
   constructor(
     private afAuth: AngularFireAuth,
     private fs: AngularFirestore
   ) {
     this.usersCollection = this.fs.collection<IUserData>('users');
-    this.projectsCollection = this.fs.collection<IProjectData>('projects');
-    this.tasksCollection = this.fs.collection<ITaskData>('tasks');
-    this.user = this.afAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.fs.doc(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null)
+    this.projectsCollection = this.fs.collection<IProjectData>('projects1');
+    this.tasksCollection = this.fs.collection<ITaskData>('tasks1');
+    this.afAuth.onAuthStateChanged((user) => {
+      if (user) {
+        const userData = {
+          id: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email
         }
-      })
-    )
-
-    this.signedIn = new Observable((subscriber) => {
-      this.afAuth.onAuthStateChanged(subscriber);
-
-      this.users = this.usersCollection.snapshotChanges().pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data() as IUserData;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        }))
-      );
-
-      this.projects = this.projectsCollection.snapshotChanges().pipe(
-        map(actions => actions.map(a => {
-          const data = a.payload.doc.data() as IProjectData;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        }))
-      );
-
-      this.getAllTasks();
+        this.userData = userData;
+      }
     });
+    this.users = this.usersCollection.snapshotChanges().pipe(map(processChanges));
   }
 
   public googleSignIn = () => {
@@ -75,20 +67,16 @@ export class ApiService {
   }
   public login = (email, password) => {
     return this.afAuth.setPersistence('session')
-      .then((res) => {
+      .then(() => {
         return this.afAuth.signInWithEmailAndPassword(email, password);
-    })
+      })
   }
 
   public logout = () => {
     return this.afAuth.signOut();
   }
 
-  public getCurrentUserData = (id) => {
-    return this.usersCollection.ref.where('id', "==", id).get()
-  }
-
-  public updateUserData = ({id, name, email, photoURL}: IUserData) => {
+  public updateUserData = ({ id, name, email, photoURL }: IUserData) => {
     const userRef = this.usersCollection.doc(`${id}`);
     const data = {
       id,
@@ -108,7 +96,19 @@ export class ApiService {
   }
 
   public getProjectById = (id) => {
-    return this.projectsCollection.ref.where('__name__', "==", id).get()
+    return this.projectsCollection.doc(id).valueChanges()
+  }
+
+  public getProjects = (id): Observable<IProjectData[]> => {
+    const ownProjects = this.fs.collection('projects1', ref => ref.where('ownerId', "==", id))
+      .snapshotChanges()
+      .pipe(map(processChanges));
+    const membersProjects = this.fs.collection('projects1', ref => ref.where('members', 'array-contains', id))
+      .snapshotChanges()
+      .pipe(map(processChanges));
+     return combineLatest<any[]>(ownProjects, membersProjects).pipe(
+      map(arr => arr.reduce((acc, cur) => acc.concat(cur)))
+    )
   }
 
   public updateProject = (project, id) => {
@@ -119,20 +119,10 @@ export class ApiService {
     this.projectsCollection.doc(id).delete();
   }
 
-  public getUsersProject = (id) => {
-   return this.projectsCollection.ref.where('ownerId', "==", id).get()
-  }
-
-  public getAllTasks = () => {
-    this.tasksCollection.snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as ITaskData;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    ).subscribe(list => {
-      this.tasks.next(list)
-    })
+  public getAllTasksByProject = (id) => {
+    return this.fs.collection('tasks1', ref => ref.where('projectId', "==", id))
+      .snapshotChanges()
+      .pipe(map(processChanges))
   }
 
   public addTask = (task) => {
@@ -148,10 +138,13 @@ export class ApiService {
   }
 
   public getTaskById = (id) => {
-    return this.tasksCollection.ref.where('__name__', "==", id)
+    return this.tasksCollection.doc(id).valueChanges()
   }
 
   public getTaskAssignedTo = (id) => {
-    return this.tasksCollection.ref.where('assignTo.id', "==", id).get()
+    return this.fs.collection('tasks1', ref => ref.where('assignTo.id', "==", id))
+      .snapshotChanges()
+      .pipe(map(processChanges))
+    // return this.tasksCollection.ref.where('assignTo.id', "==", id).get()
   }
 }

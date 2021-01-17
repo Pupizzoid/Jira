@@ -18,11 +18,7 @@ export class AuthComponent implements OnInit {
     private api: ApiService,
     private alert: AlertService,
     private fb: FormBuilder,
-  ) {
-    this.subscriptions.push(this.api.signedIn.subscribe(user => {
-      this.isRegister = user;
-    }));
-   }
+  ) {}
 
   ngOnInit(): void {
     this.urlPath = this.router.url;
@@ -57,6 +53,9 @@ export class AuthComponent implements OnInit {
             id: user.user.uid,
             photoURL: ''
           }
+          user.user.updateProfile({
+            displayName: name
+          })
           this.api.updateUserData(userData);
         }
         this.router.navigate(['dashboard']);

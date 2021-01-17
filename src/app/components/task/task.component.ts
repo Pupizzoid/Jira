@@ -1,5 +1,5 @@
 import { taskData } from './../../utilites';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatDialog } from '@angular/material/dialog';
@@ -12,31 +12,36 @@ import { ITaskData } from '../../interfaces';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss']
 })
-export class TaskComponent {
+export class TaskComponent implements OnInit{
   public taskData: ITaskData = taskData;
-  public screenSize: number;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<TaskComponent>,
     public dialog: MatDialog,
     private api: ApiService,
   ) {
-    this.api.getTaskById(this.data.task.id)
-    .onSnapshot((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        this.taskData = doc.data();
-      });
-  });
-   }
+  //   this.api.getTaskById(this.data.task.id)
+  //   .onSnapshot((querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //       this.taskData = doc.data();
+  //     });
+  // });
+  }
+
+  ngOnInit(): void {
+    this.api.getTaskById(this.data.task.id).subscribe(data => {
+      this.taskData = data;
+    })
+  }
   public openDialog = (): void => {
-    const width = this.screenSize > 600 ? '60%' : '100vw';
-    const maxWidth = this.screenSize > 600 ? '80vw' : '100vw';
+    const width = this.api.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
 
     const dialogRef = this.dialog.open(TaskFormComponent, {
       disableClose: true,
       autoFocus: true,
-      width: width,
-      maxWidth: maxWidth,
+      width,
+      maxWidth,
       data: {
         usersList: this.data.usersList,
         formTitle: "Edit Issue",
@@ -58,7 +63,6 @@ export class TaskComponent {
         }
       }
     );
-    this.screenSize = window.innerWidth;
   }
 
   public deleteItem = (): void => {

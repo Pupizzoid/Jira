@@ -17,9 +17,8 @@ import { TaskComponent } from '../task/task.component';
 })
 export class ProjectComponent implements OnInit {
   public id: string;
-  public userAuth: Subscription;
+  public isChecked = false;
   public userData: IUserData = userData;
-  private routeSubscription: Subscription;
   public projectData: IProjectData = projectData;
   public usersList: IUserData[] = [];
   public tasksList: ITaskData[] = [];
@@ -27,7 +26,6 @@ export class ProjectComponent implements OnInit {
   public progress: ITaskData[];
   public review: ITaskData[];
   public done: ITaskData[];
-  public screenSize: number;
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
@@ -39,45 +37,41 @@ export class ProjectComponent implements OnInit {
   private subscriptions = [];
 
   ngOnInit(): void {
-    this.subscriptions.push(this.routeSubscription = this.route.params.subscribe(params => this.id = params['id']));
+    this.subscriptions.push(
+     this.route.params
+        .subscribe(params => this.id = params['id'])
+    );
 
-    this.api.getProjectById(this.id)
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        this.projectData = doc.data();
-      });
-    });
-    this.subscriptions.push(this.userAuth = this.api.signedIn.subscribe((user) => {
-      if (user) {
-        this.api.getCurrentUserData(user.uid)
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              this.userData = doc.data();
-            });
-          })
-      }
-    }));
+    this.subscriptions.push(
+      this.api.getProjectById(this.id).subscribe(data => {
+        this.projectData = data;
+        this.usersList = data.membersInfoList;
+      })
+    );
 
-    this.subscriptions.push(this.api.users.subscribe((users) => {
-      this.usersList = users;
-    }));
-
-    this.subscriptions.push(this.api.tasks.subscribe(data => {
+    this.subscriptions.push(
+      this.api.getAllTasksByProject(this.id).subscribe(data => {
       const newData = data.filter(task => task.projectId === this.id)
       this.todo = newData.filter(item => item.status.toLowerCase() === 'todo');
       this.progress = newData.filter(item => item.status.toLowerCase() === 'progress');
       this.review = newData.filter(item => item.status.toLowerCase() === 'review');
       this.done = newData.filter(item => item.status.toLowerCase() === 'done');
       this.tasksList = newData;
-    }));
-
-    this.screenSize = window.innerWidth;
+      })
+    );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe()
     })
+  }
+  public handleChange = (event) => {
+    const method = event.checked ? this.api.getTaskAssignedTo : this.api.getAllTasksByProject;
+    const id = event.checked ? this.api.userData.id : this.id;
+    method(id).subscribe(data => {
+      this.getAllTasksData(data);
+    });
   }
 
   public openTaskForm = (): void => {
@@ -101,19 +95,21 @@ export class ProjectComponent implements OnInit {
         deadline: '',
       }
     })
-    this.subscriptions.push(dialogRef.afterClosed().subscribe(
+    this.subscriptions.push(
+      dialogRef.afterClosed().subscribe(
       data => {
         if (data) {
           const currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
           this.api.addTask({...data, createdDate: currentDate, projectId: this.id});
         }
       }
-  ));
+      )
+    );
   }
 
   public openTask = (item: ITaskData): void => {
-    const width = this.screenSize > 600 ? '60%' : '100vw';
-    const maxWidth = this.screenSize > 600 ? '80vw' : '100vw';
+    const width = this.api.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
 
     const dialogRef = this.dialog.open(TaskComponent, {
       disableClose: true,
@@ -125,21 +121,6 @@ export class ProjectComponent implements OnInit {
         usersList: this.usersList,
       }
     })
-  }
-
-  public handleGetMyTask = (): void => {
-    this.api.getTaskAssignedTo(this.userData.id)
-      .then((querySnapshot) => {
-        const myIssues = [];
-        querySnapshot.forEach((doc) => {
-          myIssues.push(doc.data());
-        });
-        this.getAllTasksData(myIssues);
-    });
-  }
-
-  public handleAllTasks = (): void => {
-    this.api.getAllTasks();
   }
 
   public drop = (event: CdkDragDrop<string[]>): void => {

@@ -24,7 +24,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -78,6 +79,7 @@ import { ProjectCardComponent } from './components/project-card/project-card.com
     MatButtonToggleModule,
     MatTooltipModule,
     MatMenuModule,
+    MatSlideToggleModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],

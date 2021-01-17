@@ -13,26 +13,32 @@ import { Router } from '@angular/router';
 export class ProjectCardComponent implements OnInit {
   @Input() project: IProjectData;
   @Input() userDataId: string;
-  public isOwner: boolean;
+  public isOwner: boolean = false;
   constructor(
     private api: ApiService,
     public dialog: MatDialog,
     private router: Router,
-  ) {}
+  ) {
+    this.userDataId = this.api.userData.id;
+  }
 
   ngOnInit(): void {
     this.isOwner = this.project.ownerId === this.userDataId;
   }
 
   public handleEdit = (project: IProjectData): void => {
-    const { title, description, id } = project;
+    const width = this.api.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
+    const { title, description, id, membersInfoList} = project;
     const dialogRef = this.dialog.open(FormProjectComponent, {
       disableClose: true,
       autoFocus: true,
-      width: '60%',
+      width,
+      maxWidth,
       data: {
         title,
-        description
+        description,
+        membersInfoList
       }
     })
     dialogRef.afterClosed().subscribe(

@@ -1,5 +1,4 @@
 import { Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
 import { FormProjectComponent } from '../form-project/form-project.component';
 import { ApiService, AlertService } from 'src/app/services';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,28 +17,21 @@ export class ProjectsListComponent implements OnInit {
   public userData: IUserData = userData;
   public userAuth: Subscription;
   constructor(
-    private router: Router,
     private api: ApiService,
     public dialog: MatDialog,
     private alert: AlertService
-  ) { }
+  ) {
+    this.userData = this.api.userData
+  }
 
   private subscriptions = []
 
   ngOnInit(): void {
-    this.subscriptions.push(this.api.projects.subscribe((projects) => {
-      this.projectList = projects;
-    }));
-    this.subscriptions.push(this.userAuth = this.api.signedIn.subscribe((user) => {
-      if (user) {
-        this.api.getCurrentUserData(user.uid)
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              this.userData = doc.data();
-            });
-          })
-      }
-    }));
+    this.subscriptions.push(
+      this.api.getProjects(this.api.userData.id).subscribe(data => {
+        this.projectList = [...new Set(data)];
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -49,21 +41,26 @@ export class ProjectsListComponent implements OnInit {
   }
 
   public openDialog = (): void => {
+    const width = this.api.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
     const dialogRef = this.dialog.open(FormProjectComponent, {
       disableClose: true,
       autoFocus: true,
-      width: '60%',
+      width,
+      maxWidth,
       data: {
         title: '',
         description: '',
-        participants: ''
+        membersInfoList: []
       }
     })
     this.subscriptions.push(dialogRef.afterClosed().subscribe(
       data => {
         if (data) {
-          const { title, description, participants } = data;
-          const project = { title, description, ownerId: this.userData.id , tasks:[]}
+          const { title, description, members } = data;
+          const membersArray = members.map(item => item.id);
+          const membersInfoList: IUserData[] = [...members, this.api.userData];
+          const project = { title, description, ownerId: this.api.userData.id, members: membersArray, membersInfoList }
           this.api.addProject(project)
         }
       }

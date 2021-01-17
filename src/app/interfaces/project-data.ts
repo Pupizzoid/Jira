@@ -1,8 +1,9 @@
+import { IUserData } from './index';
 export interface IProjectData {
   title: string
   description: string
-  participants?: string[]
+  members?: string[]
   ownerId: string,
-  tasks: string[],
-  id?: string
+  id?: string,
+  membersInfoList?: IUserData[]
 }

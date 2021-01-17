@@ -1,5 +1,14 @@
 .project {
   user-select: none;
+
+  &--member {
+    border-left: .25rem solid #f2d600;
+  }
+
+  &--own {
+    border-left: .25rem solid #61bd4f;
+  }
+
   &__card {
     min-height: 200px;
     display: flex;

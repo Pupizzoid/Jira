@@ -4,7 +4,7 @@
     <mat-form-field appearance="outline"  class="form__field">
       <mat-label>Title</mat-label>
       <input matInput placeholder="Create Jira" formControlName="title">
-      <mat-error *ngIf="_title.errors?.required">
+      <mat-error *ngIf="title.errors?.required">
         Title is <strong>required</strong>
       </mat-error>
     </mat-form-field>
@@ -12,9 +12,37 @@
     <mat-form-field appearance="outline" class="form__field">
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description" ></textarea>
-      <mat-error *ngIf="_description.errors?.required">
+      <mat-error *ngIf="description.errors?.required">
         Description is <strong>required</strong>
       </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-chip-list">
+      <mat-label>Invite to project</mat-label>
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip
+          *ngFor="let user of selectedUsers"
+          [selectable]="selectable"
+          [removable]="removable"
+          (removed)="remove(user)">
+          {{user.name}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="New participants..."
+          #fruitInput
+          formControlName="members"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+          {{user.name}}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
   </div>

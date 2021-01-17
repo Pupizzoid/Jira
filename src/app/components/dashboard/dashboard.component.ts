@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services';
 import { Router } from '@angular/router';
 import { IUserData, IProjectData } from '../../interfaces';
@@ -12,9 +11,8 @@ import { slideInAnimation } from '../../app-animation';
   styleUrls: ['./dashboard.component.scss'],
   animations: [slideInAnimation ]
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   public projectList: IProjectData[] = [projectData];
-  public userAuth: Subscription;
   public userData: IUserData = userData;
   constructor(
     private api: ApiService,
@@ -23,23 +21,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private subscriptions = [];
   ngOnInit(): void {
-    this.subscriptions.push(this.userAuth = this.api.signedIn.subscribe((user) => {
-      if (user) {
-        this.api.getCurrentUserData(user.uid)
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              this.userData = doc.data();
-          });
-      })
-      } else {
-        this.router.navigate([ 'login' ]);
-      }
-    }));
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((sub) => {
-      sub.unsubscribe()
-    })
+    if (this.api.userData) {
+      this.userData = this.api.userData;
+    } else {
+      this.router.navigate([ 'login' ]);
+    }
   }
 }

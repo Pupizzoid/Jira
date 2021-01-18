@@ -1,5 +1,6 @@
 ## Jira
 * [General info](#general-info)
+* [Demo](#demo)
 * [Technologies](#technologies)
 * [Installation](#installation)
 * [Setup](#setup)
@@ -7,6 +8,10 @@
 ## General info
 
 This project is a simple task manager. User has possibility to create projects, invite people to a project from all users registered in the system, create issues, assigned issues to project participants.
+
+## Demo
+
+[Here is a working live demo](https://jira-9223e.web.app/login)
 ## Technologies
 
 Project created with: 

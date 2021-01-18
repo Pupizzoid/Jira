@@ -25,13 +25,7 @@ export class ApiService {
   private tasksCollection: AngularFirestoreCollection<ITaskData>;
 
   public users: Observable<IUserData[]>;
-  // public projects: Observable<IProjectData[]>;
-  // public taskData: Observable<ITaskData[]>;
-  // public tasks: BehaviorSubject<ITaskData[]> = new BehaviorSubject([]);
-  // public currentTask: Observable<IUserData>;
-  // public user: Observable<any>;
   public userData: IUserData;
-  // public projectsData: BehaviorSubject<IProjectData[]> = new BehaviorSubject([]);
 
   constructor(
     private afAuth: AngularFireAuth,

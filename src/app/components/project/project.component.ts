@@ -93,10 +93,13 @@ export class ProjectComponent implements OnInit {
   }
 
   public openTaskForm = (): void => {
+    const width = this.api.screenSize > 600 ? '60%' : '100vw';
+    const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
     const dialogRef = this.dialog.open(TaskFormComponent, {
       disableClose: true,
       autoFocus: true,
-      width: '60%',
+      width,
+      maxWidth,
       position: {
         top: '100px'
       } ,
@@ -132,8 +135,8 @@ export class ProjectComponent implements OnInit {
     const dialogRef = this.dialog.open(TaskComponent, {
       disableClose: true,
       autoFocus: true,
-      width: width,
-      maxWidth: maxWidth,
+      width,
+      maxWidth,
       data: {
         task: item,
         usersList: this.usersList,

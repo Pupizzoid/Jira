@@ -15,9 +15,9 @@ This project is a simple task manager. User has possibility to create projects, 
 ## Technologies
 
 Project created with: 
--[Angular CLI](https://angular.io/cli)
--[Firebase](https://firebase.google.com/)
--[Angular Material](https://material.angular.io/)
+* [Angular CLI](https://angular.io/cli)
+* [Firebase](https://firebase.google.com/)
+* [Angular Material](https://material.angular.io/)
 ## Installation
 
 To run this project You should have some tools installed on your PC, which you can find in a list of links below:

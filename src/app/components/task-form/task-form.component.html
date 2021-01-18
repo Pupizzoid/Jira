@@ -40,7 +40,10 @@
 
     <mat-form-field appearance="outline" class="form__field--half">
       <mat-label>Deadline</mat-label>
-      <input matInput formControlName="deadline" type="date">
+      <input matInput [matDatepicker]="picker" formControlName="deadline" [min]="today" >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <!-- <input matInput [matDatepicker]="picker" formControlName="deadline" type="date" > -->
       <mat-error *ngIf="deadline.errors?.required">
         Deadline is <strong>required</strong>
       </mat-error>

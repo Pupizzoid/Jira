@@ -25,7 +25,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire';
@@ -39,6 +40,7 @@ import { TaskComponent } from './components/task/task.component';
 import { TaskCardComponent } from './components/task-card/task-card.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { ProjectCardComponent } from './components/project-card/project-card.com
     MatTooltipModule,
     MatMenuModule,
     MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],

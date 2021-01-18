@@ -85,9 +85,6 @@ export class AuthComponent implements OnInit {
         this.api.updateUserData(userData).then(() => {
           this.router.navigate(['dashboard']);
         })
-        // if (this.isRegister) {
-
-        // }
       }
     })
     .catch((error) => {

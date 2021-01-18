@@ -9,6 +9,7 @@ import { userData, projectData } from '../../utilites';
 import { IUserData, ITaskData } from '../../interfaces';
 import { TaskComponent } from '../task/task.component';
 
+
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
@@ -105,15 +106,17 @@ export class ProjectComponent implements OnInit {
         type: 'Task',
         priority: 'Medium',
         action: 'create',
-        deadline: '',
+        deadline: new Date(),
       }
     })
     this.subscriptions.push(
       dialogRef.afterClosed().subscribe(
       data => {
-        if (data) {
+          if (data) {
+          console.log(data);
+          // const currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
           const currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
-          this.api.addTask({...data, createdDate: currentDate, projectId: this.id});
+          // this.api.addTask({...data, createdDate: currentDate, projectId: this.id});
         }
       }
       )

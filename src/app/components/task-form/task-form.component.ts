@@ -17,6 +17,7 @@ export class TaskFormComponent implements OnInit {
   public issuePriorities: string[] = issuePriority;
   public issueStatuses: any[] = issueStatus;
   public form;
+  public today: Date = new Date()
   filteredOptions: Observable<IUserData[]>;
   constructor(
 

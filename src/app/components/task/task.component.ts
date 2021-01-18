@@ -14,23 +14,18 @@ import { ITaskData } from '../../interfaces';
 })
 export class TaskComponent implements OnInit{
   public taskData: ITaskData = taskData;
+  public deadline;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<TaskComponent>,
     public dialog: MatDialog,
     private api: ApiService,
-  ) {
-  //   this.api.getTaskById(this.data.task.id)
-  //   .onSnapshot((querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       this.taskData = doc.data();
-  //     });
-  // });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.api.getTaskById(this.data.task.id).subscribe(data => {
       this.taskData = data;
+      this.taskData.deadline = new Date(data.deadline).toJSON().slice(0, 10).replace(/-/g, '-');
     })
   }
   public openDialog = (): void => {

@@ -55,10 +55,13 @@ export class AuthComponent implements OnInit {
           }
           user.user.updateProfile({
             displayName: name
+          }).then(() => {
+            this.api.updateUserData(userData);
+            this.router.navigate(['dashboard']);
           })
-          this.api.updateUserData(userData);
+        } else {
+          this.router.navigate(['dashboard']);
         }
-        this.router.navigate(['dashboard']);
       })
       .catch((error) => {
         this.alert.error(error.message);
@@ -79,10 +82,12 @@ export class AuthComponent implements OnInit {
           password: '',
           photoURL: user.photoURL
         }
-        this.api.updateUserData(userData);
-        if (this.isRegister) {
+        this.api.updateUserData(userData).then(() => {
           this.router.navigate(['dashboard']);
-        }
+        })
+        // if (this.isRegister) {
+
+        // }
       }
     })
     .catch((error) => {

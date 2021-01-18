@@ -4,7 +4,6 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { ApiService } from 'src/app/services';
 import { IProjectData } from '../../interfaces';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { userData, projectData } from '../../utilites';
 import { IUserData, ITaskData } from '../../interfaces';
@@ -59,6 +58,20 @@ export class ProjectComponent implements OnInit {
       this.tasksList = newData;
       })
     );
+
+    this.subscriptions.push(
+      this.api.signedIn.subscribe(user => {
+      if (user) {
+        const userInfo = {
+          id: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email
+        }
+        this.userData = userInfo
+      }
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -68,7 +81,7 @@ export class ProjectComponent implements OnInit {
   }
   public handleChange = (event) => {
     const method = event.checked ? this.api.getTaskAssignedTo : this.api.getAllTasksByProject;
-    const id = event.checked ? this.api.userData.id : this.id;
+    const id = event.checked ? this.userData.id : this.id;
     method(id).subscribe(data => {
       this.getAllTasksData(data);
     });

@@ -21,14 +21,26 @@ export class ProjectsListComponent implements OnInit {
     public dialog: MatDialog,
     private alert: AlertService
   ) {
-    this.userData = this.api.userData
+    this.subscriptions.push(
+      this.api.signedIn.subscribe(user => {
+      if (user) {
+        const userInfo = {
+          id: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email
+        }
+        this.userData = userInfo
+        }
+      })
+    );
   }
 
   private subscriptions = []
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.api.getProjects(this.api.userData.id).subscribe(data => {
+      this.api.getProjects(this.userData.id).subscribe(data => {
         this.projectList = [...new Set(data)];
       })
     );
@@ -59,8 +71,8 @@ export class ProjectsListComponent implements OnInit {
         if (data) {
           const { title, description, members } = data;
           const membersArray = members.map(item => item.id);
-          const membersInfoList: IUserData[] = [...members, this.api.userData];
-          const project = { title, description, ownerId: this.api.userData.id, members: membersArray, membersInfoList }
+          const membersInfoList: IUserData[] = [...members, this.userData];
+          const project = { title, description, ownerId: this.userData.id, members: membersArray, membersInfoList }
           this.api.addProject(project)
         }
       }

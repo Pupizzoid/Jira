@@ -3,7 +3,7 @@
   <p *ngIf="projectList.length <= 0" class="project__helper-text">You don't have any projects</p>
   <ul *ngIf="projectList" class='project__list'>
     <li *ngFor="let project of projectList" class='project__item'>
-      <app-project-card [project]="project" ></app-project-card>
+      <app-project-card [project]="project" [userDataId]="userData.id"></app-project-card>
     </li>
   </ul>
   <button mat-fab color="primary" aria-label="Example icon button with a delete icon" class="project__add-btn" (click)="openDialog()"  matTooltip="Create new project">

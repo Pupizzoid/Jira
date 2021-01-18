@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
 import { IUserData, IProjectData, ITaskData } from '../interfaces';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import firebase from 'firebase/app';
@@ -19,13 +19,14 @@ const processChanges = (changes) => {
 })
 
 export class ApiService {
+  public signedIn: Observable<any>;
   public screenSize = window.innerWidth;
   private usersCollection: AngularFirestoreCollection<IUserData>;
   private projectsCollection: AngularFirestoreCollection<IProjectData>;
   private tasksCollection: AngularFirestoreCollection<ITaskData>;
 
   public users: Observable<IUserData[]>;
-  public userData: IUserData;
+  public userData: Subject<IUserData> = new Subject();
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -34,17 +35,24 @@ export class ApiService {
     this.usersCollection = this.fs.collection<IUserData>('users');
     this.projectsCollection = this.fs.collection<IProjectData>('projects');
     this.tasksCollection = this.fs.collection<ITaskData>('tasks');
-    this.afAuth.onAuthStateChanged((user) => {
-      if (user) {
-        const userData = {
-          id: user.uid,
-          name: user.displayName,
-          photoURL: user.photoURL,
-          email: user.email
-        }
-        this.userData = userData;
-      }
-    });
+
+    this.signedIn = new Observable((subscriber) => {
+      this.afAuth.onAuthStateChanged(subscriber);
+    })
+
+    // this.afAuth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     const userData = {
+    //       id: user.uid,
+    //       name: user.displayName,
+    //       photoURL: user.photoURL,
+    //       email: user.email
+    //     }
+    //     console.log(userData);
+
+    //     this.userData.next(userData)
+    //   }
+    // })
     this.users = this.usersCollection.snapshotChanges().pipe(map(processChanges));
   }
 

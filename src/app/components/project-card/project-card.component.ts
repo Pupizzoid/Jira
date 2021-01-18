@@ -18,9 +18,7 @@ export class ProjectCardComponent implements OnInit {
     private api: ApiService,
     public dialog: MatDialog,
     private router: Router,
-  ) {
-    this.userDataId = this.api.userData.id;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.isOwner = this.project.ownerId === this.userDataId;
@@ -29,7 +27,8 @@ export class ProjectCardComponent implements OnInit {
   public handleEdit = (project: IProjectData): void => {
     const width = this.api.screenSize > 600 ? '60%' : '100vw';
     const maxWidth = this.api.screenSize > 600 ? '80vw' : '100vw';
-    const { title, description, id, membersInfoList} = project;
+    const { title, description, id, membersInfoList, ownerId } = project;
+    const newMembersList = membersInfoList.filter(item => item.id !== ownerId);
     const dialogRef = this.dialog.open(FormProjectComponent, {
       disableClose: true,
       autoFocus: true,
@@ -38,7 +37,7 @@ export class ProjectCardComponent implements OnInit {
       data: {
         title,
         description,
-        membersInfoList
+        membersInfoList: newMembersList
       }
     })
     dialogRef.afterClosed().subscribe(

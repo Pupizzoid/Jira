@@ -32,8 +32,8 @@ export class ApiService {
     private fs: AngularFirestore
   ) {
     this.usersCollection = this.fs.collection<IUserData>('users');
-    this.projectsCollection = this.fs.collection<IProjectData>('projects1');
-    this.tasksCollection = this.fs.collection<ITaskData>('tasks1');
+    this.projectsCollection = this.fs.collection<IProjectData>('projects');
+    this.tasksCollection = this.fs.collection<ITaskData>('tasks');
     this.afAuth.onAuthStateChanged((user) => {
       if (user) {
         const userData = {
@@ -94,10 +94,10 @@ export class ApiService {
   }
 
   public getProjects = (id): Observable<IProjectData[]> => {
-    const ownProjects = this.fs.collection('projects1', ref => ref.where('ownerId', "==", id))
+    const ownProjects = this.fs.collection('projects', ref => ref.where('ownerId', "==", id))
       .snapshotChanges()
       .pipe(map(processChanges));
-    const membersProjects = this.fs.collection('projects1', ref => ref.where('members', 'array-contains', id))
+    const membersProjects = this.fs.collection('projects', ref => ref.where('members', 'array-contains', id))
       .snapshotChanges()
       .pipe(map(processChanges));
      return combineLatest<any[]>(ownProjects, membersProjects).pipe(
@@ -114,7 +114,7 @@ export class ApiService {
   }
 
   public getAllTasksByProject = (id) => {
-    return this.fs.collection('tasks1', ref => ref.where('projectId', "==", id))
+    return this.fs.collection('tasks', ref => ref.where('projectId', "==", id))
       .snapshotChanges()
       .pipe(map(processChanges))
   }
@@ -136,9 +136,8 @@ export class ApiService {
   }
 
   public getTaskAssignedTo = (id) => {
-    return this.fs.collection('tasks1', ref => ref.where('assignTo.id', "==", id))
+    return this.fs.collection('tasks', ref => ref.where('assignTo.id', "==", id))
       .snapshotChanges()
       .pipe(map(processChanges))
-    // return this.tasksCollection.ref.where('assignTo.id', "==", id).get()
   }
 }

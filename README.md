@@ -1,27 +1,27 @@
-# Jira
+## Jira
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Installation](#installation)
+* [Setup](#setup)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.
+## General info
 
-## Development server
+This project is a simple task manager. User has possibility to create projects, invite people to a project from all users registered in the system, create issues, assigned issues to project participants.
+## Technologies
+
+Project created with: 
+-[Angular CLI](https://angular.io/cli)
+-[Firebase](https://firebase.google.com/)
+-[Angular Material](https://material.angular.io/)
+## Installation
+
+To run this project You should have some tools installed on your PC, which you can find in a list of links below:
+-[Download and install](https://nodejs.org/en/) Node.js
+-[Install Angular CLI](https://angular.io/cli)
+-Clone this project: `https://github.com/Pupizzoid/Jira`
+-Run `npm install` to install the dependencies
+## Setup
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

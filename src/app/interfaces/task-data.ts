@@ -6,7 +6,7 @@ export interface ITaskData {
   priority: string
   assignTo: {name:string}
   projectId: string
-  deadline: string
-  createdDate: string,
+  deadline: Date
+  createdDate: Date,
   id?: string
 }

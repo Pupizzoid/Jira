@@ -29,8 +29,8 @@ export const taskData = {
   type: '',
   assignTo: {name: ''},
   projectId: '',
-  deadline: '',
-  createdDate: ''
+  deadline: new Date(),
+  createdDate: new Date()
 }
 
 export const filterData = [

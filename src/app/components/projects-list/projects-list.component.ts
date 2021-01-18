@@ -48,7 +48,7 @@ export class ProjectsListComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => {
-      sub.unsubscribe()
+      sub.unsubscribe();
     })
   }
 

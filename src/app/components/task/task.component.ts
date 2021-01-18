@@ -25,8 +25,7 @@ export class TaskComponent implements OnInit{
   ngOnInit(): void {
     this.api.getTaskById(this.data.task.id).subscribe(data => {
       this.taskData = data;
-      this.taskData.deadline = new Date(data.deadline).toJSON().slice(0, 10).replace(/-/g, '-');
-    })
+    });
   }
   public openDialog = (): void => {
     const width = this.api.screenSize > 600 ? '60%' : '100vw';

@@ -9,7 +9,7 @@
     <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent" matTooltip="{{'Type issue: ' + item.type}}">{{getIconName()}}</mat-icon>
   </div>
   <p>{{item.priority}}</p>
-  <p class="task__dedline-info"><span>Deadline:</span> <span>{{deadline }}</span></p>
+  <p class="task__dedline-info"><span>Deadline:</span> <span>{{item.deadline.seconds * 1000 | date }}</span></p>
   <div class="task__assigne-info">
     <span>Assigned to:</span>
     <p>

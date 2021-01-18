@@ -1,6 +1,6 @@
 <mat-card class="project__card" [ngClass]="{
-  'project--own': this.userDataId === project.ownerId,
-  'project--member': this.userDataId !== project.ownerId}">
+  'project--own': this.userData.id === project.ownerId,
+  'project--member': this.userData.id !== project.ownerId}">
   <div class="project__card-action">
     <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" [matMenuTriggerFor]="menu" [disabled]="!isOwner">
       <mat-icon>more_vert</mat-icon>

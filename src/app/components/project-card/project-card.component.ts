@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from 'src/app/services';
 import { MatDialog } from '@angular/material/dialog';
-import { IProjectData } from '../../interfaces';
+import { IProjectData, IUserData } from '../../interfaces';
 import { FormProjectComponent } from '../form-project/form-project.component';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class ProjectCardComponent implements OnInit {
   @Input() project: IProjectData;
-  @Input() userDataId: string;
+  @Input() userData: IUserData;
   public isOwner: boolean = false;
   constructor(
     private api: ApiService,
@@ -21,7 +21,7 @@ export class ProjectCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isOwner = this.project.ownerId === this.userDataId;
+    this.isOwner = this.project.ownerId === this.userData.id;
   }
 
   public handleEdit = (project: IProjectData): void => {
@@ -43,10 +43,10 @@ export class ProjectCardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {
         if (data) {
-          console.log(data);
-
-          const { title, description } = data;
-          const project = { title, description, ownerId: this.userDataId , tasks:[]}
+          const { title, description, members } = data;
+          const membersArray = members.map(item => item.id);
+          const membersInfoList: IUserData[] = [...members, this.userData];
+          const project = { title, description, ownerId: this.userData.id, members: membersArray, membersInfoList }
           this.api.updateProject(project, id)
         }
       }

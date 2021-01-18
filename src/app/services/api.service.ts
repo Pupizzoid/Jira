@@ -40,19 +40,6 @@ export class ApiService {
       this.afAuth.onAuthStateChanged(subscriber);
     })
 
-    // this.afAuth.onAuthStateChanged((user) => {
-    //   if (user) {
-    //     const userData = {
-    //       id: user.uid,
-    //       name: user.displayName,
-    //       photoURL: user.photoURL,
-    //       email: user.email
-    //     }
-    //     console.log(userData);
-
-    //     this.userData.next(userData)
-    //   }
-    // })
     this.users = this.usersCollection.snapshotChanges().pipe(map(processChanges));
   }
 
@@ -124,7 +111,9 @@ export class ApiService {
   public getAllTasksByProject = (id) => {
     return this.fs.collection('tasks', ref => ref.where('projectId', "==", id))
       .snapshotChanges()
-      .pipe(map(processChanges))
+      .pipe(
+        map(processChanges)
+      )
   }
 
   public addTask = (task) => {
@@ -143,8 +132,8 @@ export class ApiService {
     return this.tasksCollection.doc(id).valueChanges()
   }
 
-  public getTaskAssignedTo = (id) => {
-    return this.fs.collection('tasks', ref => ref.where('assignTo.id', "==", id))
+  public getTaskAssignedTo = (id, projectId) => {
+    return this.fs.collection('tasks', ref => ref.where('assignTo.id', "==", id).where('projectId', "==", projectId))
       .snapshotChanges()
       .pipe(map(processChanges))
   }

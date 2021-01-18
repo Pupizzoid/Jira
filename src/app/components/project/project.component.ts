@@ -81,11 +81,15 @@ export class ProjectComponent implements OnInit {
     })
   }
   public handleChange = (event) => {
-    const method = event.checked ? this.api.getTaskAssignedTo : this.api.getAllTasksByProject;
-    const id = event.checked ? this.userData.id : this.id;
-    method(id).subscribe(data => {
-      this.getAllTasksData(data);
-    });
+    if (event.checked) {
+      this.api.getTaskAssignedTo(this.userData.id, this.id).subscribe(data => {
+        this.getAllTasksData(data);
+      })
+    } else {
+      this.api.getAllTasksByProject(this.id).subscribe(data => {
+        this.getAllTasksData(data);
+      })
+    }
   }
 
   public openTaskForm = (): void => {
@@ -113,10 +117,8 @@ export class ProjectComponent implements OnInit {
       dialogRef.afterClosed().subscribe(
       data => {
           if (data) {
-          console.log(data);
-          // const currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
           const currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
-          // this.api.addTask({...data, createdDate: currentDate, projectId: this.id});
+          this.api.addTask({...data, createdDate: new Date(), projectId: this.id});
         }
       }
       )

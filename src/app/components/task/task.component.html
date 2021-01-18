@@ -1,4 +1,4 @@
-<div mat-dialog-content class="issue" mat-base-typography>
+<div mat-dialog-content class="issue" mat-base-typography *ngIf="taskData">
   <div class="issue__item issue__item--flex">
     <h3 class="issue__title">
       <mat-icon aria-hidden="false" aria-label="icon" color="accent">web</mat-icon>
@@ -40,14 +40,14 @@
         <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">event</mat-icon>
         <span>Created date: </span>
       </p>
-      <p>{{taskData.createdDate }}</p>
+      <p>{{taskData.createdDate.seconds * 1000 | date }}</p>
     </div>
     <div>
       <p class="issue__subtitle">
         <mat-icon aria-hidden="false" aria-label="icon" class="warn" color="accent">description</mat-icon>
         <span>Deadline: </span>
       </p>
-      <p>{{taskData.deadline }}</p>
+      <p>{{taskData.deadline.seconds * 1000 | date }}</p>
     </div>
   </div>
   <mat-divider class="issue__divider"></mat-divider>

@@ -21,10 +21,10 @@ Project created with:
 ## Installation
 
 To run this project You should have some tools installed on your PC, which you can find in a list of links below:
--[Download and install](https://nodejs.org/en/) Node.js
--[Install Angular CLI](https://angular.io/cli)
--Clone this project: `https://github.com/Pupizzoid/Jira`
--Run `npm install` to install the dependencies
+* [Download and install](https://nodejs.org/en/) Node.js
+* [Install Angular CLI](https://angular.io/cli)
+* Clone this project: `https://github.com/Pupizzoid/Jira`
+* Run `npm install` to install the dependencies
 ## Setup
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
